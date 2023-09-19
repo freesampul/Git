@@ -65,13 +65,4 @@ public class blob {
             return null;
         }
     }
-
-    public static void main(String[] args) {
-        try {
-            String file = "input.txt";
-            blobFile(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

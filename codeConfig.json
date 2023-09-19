@@ -1,0 +1,70 @@
+[
+    {
+        "className": "Index",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [],
+                "values": []
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "init",
+                "parameters": [],
+                "values": []
+            },
+            {
+                "methodName": "commit",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "__TEST_FILE_NAME__"
+                ]
+            },
+            {
+                "methodName": "remove",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "__TEST_FILE_NAME__"
+                ]
+            }
+        ]
+    },
+    {
+        "className": "Blob",
+        "methodConfigs": [
+            {
+                "methodName": "blobFile",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "__TEST_FILE_NAME__"
+                ]
+            },
+            {
+                "methodName": "write",
+                "parameters": [
+                    "String",
+                    "StringBuilder"
+                ],
+                "values": [
+                    "sHash",
+                    "sbInside"
+                ]
+            },
+            {
+                "methodName": "hashStringToSHA1",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "input"
+                ]
+            }
+        ]
+    }
+]
