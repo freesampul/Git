@@ -40,4 +40,9 @@ public class tree {
         sc.close();
         sData = newContent;
     }
+    public String getSHA1()
+    {
+        // return ("86f7e437faa5a7fce15d1ddcb9eaeaea377667b8");
+        return (blob.hashStringToSHA1(sData.toString()));
+    }
 }
