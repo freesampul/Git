@@ -27,7 +27,7 @@ public class commitTest {
     @Test
     void testWriteOut() throws IOException {
         File f = new File (c.generateSha1());
-        assertTrue (f.exists());
+        assertEquals (f.exists(),true);
     }
 
     @Test
@@ -35,11 +35,13 @@ public class commitTest {
         tree t = new tree();
         assertEquals(t.getSHA1(),a.createTree());
         File f = new File (t.getSHA1());
-        // assertTrue(f.exists());
+        assertEquals(f.exists(),true);
     }
 
     @Test
-    void testGenerateSha1() {
-        
+    void testGenerateSha1() throws IOException {
+        b.writeOut();
+        File f = new File (b.generateSha1());
+        assertEquals(f.exists(),true);
     }
 }
