@@ -19,7 +19,14 @@ public class commit{
 
     public commit (String parentTree, String parentCommit, String author, String summary) throws Exception// if no parent Sha1 just enter ""
     {
-        this.parentTree = createTree();
+        if (parentTree == "")
+        {
+            this.parentTree = createTree();
+        }
+        else
+        {
+            this.parentTree = parentTree;
+        }
         this.summary = summary;
         this.author = author;
         this.parentCommit = parentCommit;
@@ -112,9 +119,11 @@ public class commit{
         pw.close();
     }
     public static void main(String[] args) throws Exception {
-        commit c = new commit("","","Mark Ma", "this is a test");
+        commit c = new commit("adkjahsdkjaskjhad","","Mark Ma", "this is a test");
         commit a = new commit ("",c.generateSha1(),"William", "test2");
+        commit b = new commit ("",a.generateSha1(),"Sammy", "test3");
         c.writeOut();
         a.writeOut();
+        b.writeOut();
     }
 }
