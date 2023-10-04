@@ -6,6 +6,10 @@ import java.util.Map;
 import java.nio.file.Files;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class index extends blob {
 
@@ -27,11 +31,26 @@ public class index extends blob {
         if (!Files.exists(index)) {
             try {
                 Files.createFile(index);
-            }catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
- }
+    }
+
+    public static void add(tree tree) throws IOException {
+        tree.getContents();
+        String treeContents = tree.getString();
+        String treeSha1 = blob.hashStringToSHA1(treeContents);
+        if (new File("objects/" + treeSha1).exists()) {
+            return;
+        }
+        System.out.println("added tree with SHA-1: " + treeSha1);
+        FileWriter fw = new FileWriter("index", true);
+        fw.write("tree : " + treeSha1 + "\n");
+        fw.close();
+        tree.writeToObjects();
+
+    }
 
     public static void commit(String fileName) throws IOException {
         try {
@@ -39,7 +58,8 @@ public class index extends blob {
             files.put(fileName, hashName);
 
             Path index = Paths.get("index");
-            try (BufferedWriter write = Files.newBufferedWriter(index, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+            try (BufferedWriter write = Files.newBufferedWriter(index, StandardOpenOption.CREATE,
+                    StandardOpenOption.WRITE)) {
                 for (Map.Entry<String, String> entry : files.entrySet()) {
                     write.write(entry.getKey() + " : " + entry.getValue());
                     write.newLine();
@@ -47,7 +67,7 @@ public class index extends blob {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } 
+        }
     }
 
     public static void remove(String fileName) throws IOException {
@@ -59,7 +79,8 @@ public class index extends blob {
                 e.printStackTrace();
             }
 
-            try (BufferedWriter write = Files.newBufferedWriter(index, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+            try (BufferedWriter write = Files.newBufferedWriter(index, StandardOpenOption.CREATE,
+                    StandardOpenOption.WRITE)) {
                 for (Map.Entry<String, String> entry : files.entrySet()) {
                     write.write(entry.getKey() + " : " + entry.getValue());
                     write.newLine();
@@ -67,6 +88,32 @@ public class index extends blob {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } 
+        }
+    }
+
+    public static void updateIndexTree() throws IOException {
+        File indexFile = new File("index");
+        File temp = new File("tempind");
+
+        BufferedReader br = new BufferedReader(new FileReader(indexFile));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
+
+        String curr;
+        while ((curr = br.readLine()) != null) {
+            {
+                if (curr.startsWith("blob")) {
+                    String[] line = curr.split(" : ");
+                    String orginalFile = line[0].substring(5).trim();
+                    String sha = line[1].trim();
+                    String updated = "blob : " + sha + " : " + orginalFile;
+                    bw.write(updated);
+
+                } else if (curr.startsWith("tree"))
+                    bw.write(curr);
+            }
+        }
+        br.close();
+        bw.close();
+        temp.renameTo(indexFile);
     }
 }
