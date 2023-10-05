@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -43,5 +44,18 @@ public class commitTest {
         b.writeOut();
         File f = new File (b.generateSha1());
         assertEquals(f.exists(),true);
+    }
+
+    @Test
+    void test1commit() throws Exception {
+        commit onecommit = new commit("adkjahsdkjaskjhad", "", "Mark Ma", "this is a test");
+        assertEquals("adkjahsdkjaskjhad", onecommit.getParentTree());
+        assertEquals("", onecommit.getParentCommit());
+        assertEquals("Mark Ma", onecommit.getAuthor());
+        assertEquals("this is a test", onecommit.getSummary());
+        assertEquals("", onecommit.getNextSha());
+
+        assertNotNull(onecommit.getParentTree());
+        assertTrue(onecommit.getParentTree().length() > 0);
     }
 }

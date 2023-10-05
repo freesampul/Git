@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,6 +17,7 @@ public class commit {
     private String author;
     private String parentTree;
     private String parentCommit;
+    private String nextSha;
 
     // This is the initial commit, sorry jake wrote this weird to me
     public commit(String parentTree, String parentCommit, String author, String summary) throws Exception// if no parent
@@ -31,6 +33,7 @@ public class commit {
         this.author = author;
         this.parentCommit = parentCommit;
         clearIndex();
+        this.nextSha ="";
     }
 
     // Clears the inex
@@ -105,8 +108,6 @@ public class commit {
             FileWriter writer = new FileWriter(parentCommit);
             writer.write(content.toString());
             writer.close();
-            //
-            File input_file = new File(parentCommit);
             BufferedReader file_reader = new BufferedReader(new FileReader(parentCommit));
 
             StringBuilder file_content = new StringBuilder();
@@ -131,6 +132,31 @@ public class commit {
         pw.close();
     }
 
+
+     // This is the complicated part! Writes the new sha into the old file
+    public void writeInNewCommit() throws IOException {
+        File orginalFile = new File("objects/" + parentCommit);
+        File newFile = new File("balls");
+        BufferedReader reader = new BufferedReader(new FileReader(orginalFile));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
+        String curr;
+        int i = 0;
+
+        while ((curr = reader.readLine()) != null) {
+            if (i == 2) {
+                writer.write(getSha());
+            } else
+                writer.write(curr);
+
+            if (i != 5)
+                writer.write("\n");
+            i++;
+        }
+        writer.close();
+        reader.close();
+        newFile.renameTo(orginalFile);
+    }
+
     public static void main(String[] args) throws Exception {
         commit c = new commit("adkjahsdkjaskjhad", "", "Mark Ma", "this is a test");
         commit a = new commit("", c.generateSha1(), "William", "test2");
@@ -148,6 +174,26 @@ public class commit {
             br.close();
         }
         return treeString;
+    }
+
+    public String getParentTree() {
+        return parentTree;
+    }
+
+    public String getParentCommit() {
+        return parentCommit;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getSummary() {
+        return summary;
+    } 
+    
+    public String getNextSha(){
+        return nextSha;
     }
 
 }
