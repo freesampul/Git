@@ -9,6 +9,8 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javafx.stage.DirectoryChooser;
+
 public class finalTester {
     static Commit a;
     static Commit b;
@@ -16,9 +18,18 @@ public class finalTester {
 
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
-        File file1 = new File("file1");
-        File file2 = new File("file2");
-        File file3 = new File("file3");
+        Index.init();
+    }
+
+    public void file(String path, String content) throws IOException {
+        FileWriter fw = new FileWriter(path);
+        fw.write(content);
+        fw.close();
+    }
+
+    public void folder(String name) {
+        File folder = new File(name);
+        folder.mkdir();
     }
 
     @Test
@@ -26,8 +37,8 @@ public class finalTester {
         Index.init();
         Index.add("file1");
         Index.add("file2");
-        Commit onecommit = new Commit("", "", "Sam", "testing 1 commit");
-        assertEquals("", onecommit.getParentTree());
+        Commit onecommit = new Commit("aaa", "", "Sam", "testing 1 commit");
+        assertEquals("aaa", onecommit.getParentTree());
         assertEquals("", onecommit.getParentCommit());
         assertEquals("Sam", onecommit.getAuthor());
         assertEquals("testing 1 commit", onecommit.getSummary());
@@ -37,6 +48,7 @@ public class finalTester {
 
     @Test
     void test2commits() throws Exception {
-       
+        File testerfolder = new File("TestFolder1");
+        testerfolder.mkdir();
     }
 }
