@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class Commit {
     static Tree t;
@@ -132,27 +134,54 @@ public class Commit {
 
     // This is the complicated part! Writes the new sha into the old file
     public void writeInNewCommit() throws IOException {
-        File f = new File("./objects/" + parentCommit);
-        File newFile = new File("balls");
-        FileReader kevin = new FileReader(f);
-        BufferedReader reader = new BufferedReader(kevin);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
-        String curr;
-        int i = 0;
-
-        while ((curr = reader.readLine()) != null) {
-            if (i == 2) {
-                writer.write(generateSha1());
-            } else
-                writer.write(curr);
-
-            if (i != 5)
-                writer.write("\n");
-            i++;
+        if (parentCommit == "") {
+            return;
         }
-        writer.close();
-        reader.close();
-        newFile.renameTo(f);
+        File originalFile = new File("objects/" + parentCommit);
+        System.out.println(originalFile.getAbsolutePath());
+        File newFile = new File("balls");
+        FileWriter ballWriter = new FileWriter(newFile);
+        try (FileReader kevin = new FileReader(originalFile);
+         BufferedReader reader = new BufferedReader(kevin);
+         BufferedWriter writer = new BufferedWriter(new FileWriter(newFile))) {
+            String curr;
+            int i = 0;
+    
+            while ((curr = reader.readLine()) != null) {
+                if (i == 2) {
+                    ballWriter.write(generateSha1());
+                } else {
+                    ballWriter.write(curr);
+                }
+    
+                if (i != 5) {
+                    ballWriter.write("\n");
+                }
+                i++;
+            }
+        }
+        ballWriter.close();
+        Files.move(newFile.toPath(), originalFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        // File newFile = new File("balls");
+        // FileReader kevin = new FileReader(originalFile);
+        // BufferedReader reader = new BufferedReader(kevin);
+        // BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
+        // String curr;
+        // int i = 0;
+
+        // while ((curr = reader.readLine()) != null) {
+        //     if (i == 2) {
+        //         writer.write(generateSha1());
+        //     } else
+        //         writer.write(curr);
+
+        //     if (i != 5)
+        //         writer.write("\n");
+        //     i++;
+        // }
+        // writer.close();
+        // reader.close();
+        // newFile.renameTo(originalFile);
     }
 
 

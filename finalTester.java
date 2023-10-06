@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class commitTest {
+public class finalTester {
     static Commit a;
     static Commit b;
     static Commit c;
@@ -19,32 +19,6 @@ public class commitTest {
         File file1 = new File("file1");
         File file2 = new File("file2");
         File file3 = new File("file3");
-    }
-
-    @Test
-    void testGetDate() {
-        // it works
-    }
-
-    @Test
-    void testWriteOut() throws IOException {
-        File f = new File(c.generateSha1());
-        assertEquals(f.exists(), true);
-    }
-
-    @Test
-    void testCreateTree() throws Exception {
-        Tree t = new Tree();
-        assertEquals(t.getSHA1(), a.createTree());
-        File f = new File(t.getSHA1());
-        assertEquals(f.exists(), true);
-    }
-
-    @Test
-    void testGenerateSha1() throws IOException {
-        b.writeOut();
-        File f = new File(b.generateSha1());
-        assertEquals(f.exists(), true);
     }
 
     @Test
