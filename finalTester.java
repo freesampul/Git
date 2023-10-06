@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.BufferedReader;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -48,7 +50,107 @@ public class finalTester {
 
     @Test
     void test2commits() throws Exception {
-        File testerfolder = new File("TestFolder1");
-        testerfolder.mkdir();
+        folder("commitFoler");
+        file("commitFoler/1", "1");
+        file("commitFoler/2", "2");
+        Index.add("commitFoler");
+        Commit commit = new Commit("aaa", "", "kevin", "kill me");
+        commit.writeOut();
+
+        folder("commitFoler2");
+        file("commitFoler2/1", "1");
+        file("commitFoler2/2", "2");
+        Index.add("commitFoler2");
+        Commit commit2 = new Commit("bbb", commit.generateSha1(), "kevin", "kill me");
+        commit2.writeOut();
+
+        try (FileReader read = new FileReader("objects/" + commit.generateSha1());
+                BufferedReader br = new BufferedReader(read)) {
+            String treeSha = br.readLine();
+            String nextSha = br.readLine();
+            assertEquals("aaa", treeSha);
+            // assertEquals(commit2.generateSha1(), nextSha);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (FileReader read = new FileReader("objects/" + commit2.generateSha1());
+                BufferedReader br2 = new BufferedReader(read)) {
+            String treeSha2 = br2.readLine();
+            String prevSha2 = br2.readLine();
+            assertEquals("bbb", treeSha2);
+            assertEquals(commit2.getParentCommit(), prevSha2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testBillionsOfCommits() throws Exception {
+        folder("commitFoler");
+        file("commitFoler/1", "1");
+        file("commitFoler/2", "2");
+        Index.add("commitFoler");
+        Commit commit = new Commit("aaa", "", "kevin", "kill me");
+        commit.writeOut();
+
+        folder("commitFoler2");
+        file("commitFoler2/1", "1");
+        file("commitFoler2/2", "2");
+        Index.add("commitFoler2");
+        Commit commit2 = new Commit("bbb", commit.generateSha1(), "kevin", "kill me");
+        commit2.writeOut();
+
+        folder("commitFoler3");
+        file("commitFoler3/1", "1");
+        file("commitFoler3/2", "2");
+        Index.add("commitFoler3");
+        Commit commit3 = new Commit("bbb", commit.generateSha1(), "kevin", "kill me");
+        commit2.writeOut();
+
+        folder("commitFoler4");
+        file("commitFoler4/1", "1");
+        file("commitFoler4/2", "2");
+        Index.add("commitFoler3");
+        Commit commit4 = new Commit("bbb", commit.generateSha1(), "kevin", "kill me");
+        commit2.writeOut();
+
+        try (FileReader read = new FileReader("objects/" + commit.generateSha1());
+                BufferedReader br = new BufferedReader(read)) {
+            String treeSha = br.readLine();
+            String nextSha = br.readLine();
+            assertEquals("aaa", treeSha);
+            // assertEquals(commit2.generateSha1(), nextSha);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (FileReader read = new FileReader("objects/" + commit2.generateSha1());
+                BufferedReader br2 = new BufferedReader(read)) {
+            String treeSha2 = br2.readLine();
+            String prevSha2 = br2.readLine();
+            assertEquals("bbb", treeSha2);
+            assertEquals(commit2.getParentCommit(), prevSha2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (FileReader read = new FileReader("objects/" + commit3.generateSha1());
+                BufferedReader br2 = new BufferedReader(read)) {
+            String treeSha2 = br2.readLine();
+            String prevSha2 = br2.readLine();
+            assertEquals("bbb", treeSha2);
+            assertEquals(commit2.getParentCommit(), prevSha2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (FileReader read = new FileReader("objects/" + commit4.generateSha1());
+                BufferedReader br2 = new BufferedReader(read)) {
+            String treeSha2 = br2.readLine();
+            String prevSha2 = br2.readLine();
+            assertEquals("bbb", treeSha2);
+            assertEquals(commit2.getParentCommit(), prevSha2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
