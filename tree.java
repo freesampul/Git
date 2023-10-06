@@ -23,18 +23,22 @@ public class Tree {
         try (BufferedReader br = new BufferedReader(new FileReader("index"))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split(" : ");
+            String[] parts = line.split(" : ");
+            if (parts.length >= 3) {
                 String type = parts[0];
                 String hash = parts[1];
                 String name = parts[2];
                 if (type.equals("blob")) {
-                    sData.append("blob : ").append(hash).append(" : ").append(name).append("\n");
+                    sData.append("blob").append(hash).append(" : ").append(name).append("\n");
                 } else if (type.equals("tree")) {
                     sData.append("tree : ").append(hash).append("\n");
                 }
+            } else {
+                sData.append(line).append("\n");
             }
         }
     }
+}
 
     public void add(String sLine) {
         String strData = sData.toString();
@@ -94,4 +98,28 @@ public class Tree {
             fw.close();
         }
     }
+
+    public String addDirectory (String directoryPath) throws IOException
+    {
+        File directory = new File(directoryPath);
+        if(!directory.exists() || !directory.isDirectory())
+        {
+            throw new IOException("Blud this isn't a directory bud");
+        }
+        File[] files = directory.listFiles();
+        Tree t = new Tree();
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                Tree another = new Tree();
+                t.add("tree : " + another.getSHA1());
+            } else {
+                Blob b = new Blob(file.getAbsolutePath());
+                t.add("blob : " + b.getSha() + " : " + file.getName());
+                hMap.put(b.getSha(), file.getName());
+            }
+        }
+        t.writeToObjects();
+        return t.getSHA1();
+    } 
 }

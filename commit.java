@@ -32,6 +32,7 @@ public class Commit {
         this.parentCommit = parentCommit;
         clearIndex();
         this.nextSha = "";
+        writeInNewCommit();
     }
 
     // Clears the inex
@@ -51,7 +52,8 @@ public class Commit {
     // Creates the tree if it doesn't exist
     public String createTree() throws IOException {
         Tree t = new Tree();
-        //t.addIndex();
+        t.addIndex();
+        t.writeToObjects();
         return (t.getSHA1());
     }
 
@@ -79,7 +81,7 @@ public class Commit {
 
     // What was the point of this mark
     public void writeOut() throws IOException {
-        File f = new File(generateSha1());
+        File f = new File("./objects/" +generateSha1());
         f.createNewFile();
         PrintWriter pw = new PrintWriter(f);
         pw.println(parentTree);
