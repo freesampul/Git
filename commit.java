@@ -7,11 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import javafx.scene.Parent;
 
 public class Commit {
     static Tree t;
@@ -22,7 +18,7 @@ public class Commit {
     private String nextSha;
 
     // This is the initial commit, sorry jake wrote this weird to me
-    public Commit(String parentTree, String parentCommit, String author, String summary) throws Exception// if no parent
+    public Commit(String parentTree, String parentCommit, String author, String summary) throws IOException// if no parent
                                                                                                          // Sha1 just
                                                                                                          // enter ""
     {
@@ -53,9 +49,9 @@ public class Commit {
     }
 
     // Creates the tree if it doesn't exist
-    public String createTree() throws Exception {
+    public String createTree() throws IOException {
         Tree t = new Tree();
-        t.addIndex();
+        //t.addIndex();
         return (t.getSHA1());
     }
 
@@ -156,14 +152,6 @@ public class Commit {
         newFile.renameTo(orginalFile);
     }
 
-    public static void main(String[] args) throws Exception {
-        Commit a = new Commit("", "", "Mark Ma", "this is a test");
-        Commit b = new Commit("", a.generateSha1(), "William", "test2");
-
-        a.writeOut();
-        b.writeOut();
-
-    }
 
     // Gets the tree associated with a hash
     public static String getTreeFromSha(String sha) throws IOException {
