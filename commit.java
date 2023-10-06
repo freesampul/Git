@@ -32,7 +32,6 @@ public class Commit {
         this.parentCommit = parentCommit;
         clearIndex();
         this.nextSha = "";
-        writeInNewCommit();
     }
 
     // Clears the inex
@@ -128,13 +127,15 @@ public class Commit {
         pw.println(getDate());
         pw.print(summary);
         pw.close();
+        writeInNewCommit();
     }
 
     // This is the complicated part! Writes the new sha into the old file
     public void writeInNewCommit() throws IOException {
-        File orginalFile = new File("./objects/" + parentCommit);
+        File f = new File("./objects/" + parentCommit);
         File newFile = new File("balls");
-        BufferedReader reader = new BufferedReader(new FileReader(orginalFile));
+        FileReader kevin = new FileReader(f);
+        BufferedReader reader = new BufferedReader(kevin);
         BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
         String curr;
         int i = 0;
@@ -151,7 +152,7 @@ public class Commit {
         }
         writer.close();
         reader.close();
-        newFile.renameTo(orginalFile);
+        newFile.renameTo(f);
     }
 
 
