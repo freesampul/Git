@@ -11,15 +11,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
-public class index extends blob {
+public class Index {
 
     public static HashMap<String, String> files = new HashMap<>();
 
     public static void init() throws IOException {
         String folder = "./objects";
-
-        java.nio.file.Path folderPath = Paths.get(folder);
-
+        Path folderPath = Paths.get(folder);
         if (!Files.exists(folderPath)) {
             try {
                 Files.createDirectory(folderPath);
@@ -27,7 +25,7 @@ public class index extends blob {
                 e.printStackTrace();
             }
         }
-        Path index = folderPath.resolve("index");
+        Path index = Paths.get("index");
         if (!Files.exists(index)) {
             try {
                 Files.createFile(index);
@@ -37,10 +35,10 @@ public class index extends blob {
         }
     }
 
-    public static void add(tree tree) throws IOException {
+    public static void add(Tree tree) throws IOException {
         tree.getContents();
         String treeContents = tree.getString();
-        String treeSha1 = blob.hashStringToSHA1(treeContents);
+        String treeSha1 = Blob.hashStringToSHA1(treeContents);
         if (new File("objects/" + treeSha1).exists()) {
             return;
         }
@@ -52,9 +50,10 @@ public class index extends blob {
 
     }
 
-    public static void commit(String fileName) throws IOException {
+    public static void add(String fileName) throws IOException {
         try {
-            String hashName = blobFile(fileName);
+            Blob b = new Blob(fileName);
+            String hashName = b.getSha();
             files.put(fileName, hashName);
 
             Path index = Paths.get("index");
@@ -73,7 +72,7 @@ public class index extends blob {
     public static void remove(String fileName) throws IOException {
         try {
             files.remove(fileName);
-            Path index = Paths.get("./objects/index");
+            Path index = Paths.get("index");
             try (BufferedWriter clear = Files.newBufferedWriter(index, StandardOpenOption.TRUNCATE_EXISTING)) {
             } catch (IOException e) {
                 e.printStackTrace();
@@ -112,7 +111,7 @@ public class index extends blob {
                     bw.write(curr);
             }
         }
-        br.close();
+        bw.close();
         bw.close();
         temp.renameTo(indexFile);
     }

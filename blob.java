@@ -9,9 +9,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class blob {
+public class Blob {
 
-    public static String blobFile(String inputFile) throws IOException {
+    private String sha;
+
+    public Blob(String inputFile) throws IOException {
         try {
             File file = new File(inputFile);
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -24,18 +26,17 @@ public class blob {
             reader.close();
             String hashed = hashStringToSHA1(fileInfo.toString());
             write(hashed, fileInfo);
-
-            return hashed;
-
+            sha = hashed;
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
     }
 
     public static void write(String hashed, StringBuilder inside) {
         try {
             String newFile = hashed;
+            File objects = new File("./objects");
+            objects.mkdirs();
             FileWriter write = new FileWriter("./objects/" + newFile);
             write.write(inside.toString());
             write.close();
@@ -65,4 +66,9 @@ public class blob {
             return null;
         }
     }
+
+    public String getSha() {
+        return sha;
+    }
+
 }

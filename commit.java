@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class commit {
-    static tree t;
+import javafx.scene.Parent;
+
+public class Commit {
+    static Tree t;
     private String summary;
     private String author;
     private String parentTree;
@@ -20,7 +22,7 @@ public class commit {
     private String nextSha;
 
     // This is the initial commit, sorry jake wrote this weird to me
-    public commit(String parentTree, String parentCommit, String author, String summary) throws Exception// if no parent
+    public Commit(String parentTree, String parentCommit, String author, String summary) throws Exception// if no parent
                                                                                                          // Sha1 just
                                                                                                          // enter ""
     {
@@ -33,7 +35,7 @@ public class commit {
         this.author = author;
         this.parentCommit = parentCommit;
         clearIndex();
-        this.nextSha ="";
+        this.nextSha = "";
     }
 
     // Clears the inex
@@ -52,13 +54,11 @@ public class commit {
 
     // Creates the tree if it doesn't exist
     public String createTree() throws Exception {
-        tree t = new tree();
+        Tree t = new Tree();
         t.addIndex();
         return (t.getSHA1());
     }
 
-    // Generates a sha. Oh jakey, we have this somewhere else in our code jake why
-    // can't we reuse it jake why rewrite it jake
     public String generateSha1() throws IOException {
         File f = new File("temp.txt");
         f.createNewFile();
@@ -78,10 +78,10 @@ public class commit {
         }
         br.close();
         f.delete();
-        return (blob.hashStringToSHA1(sb.toString()));
+        return (Blob.hashStringToSHA1(sb.toString()));
     }
 
-    // What was the point of this jake
+    // What was the point of this mark
     public void writeOut() throws IOException {
         File f = new File(generateSha1());
         f.createNewFile();
@@ -132,10 +132,9 @@ public class commit {
         pw.close();
     }
 
-
-     // This is the complicated part! Writes the new sha into the old file
+    // This is the complicated part! Writes the new sha into the old file
     public void writeInNewCommit() throws IOException {
-        File orginalFile = new File("objects/" + parentCommit);
+        File orginalFile = new File("./objects/" + parentCommit);
         File newFile = new File("balls");
         BufferedReader reader = new BufferedReader(new FileReader(orginalFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
@@ -144,7 +143,7 @@ public class commit {
 
         while ((curr = reader.readLine()) != null) {
             if (i == 2) {
-                writer.write(getSha());
+                writer.write(generateSha1());
             } else
                 writer.write(curr);
 
@@ -158,12 +157,12 @@ public class commit {
     }
 
     public static void main(String[] args) throws Exception {
-        commit c = new commit("adkjahsdkjaskjhad", "", "Mark Ma", "this is a test");
-        commit a = new commit("", c.generateSha1(), "William", "test2");
-        commit b = new commit("", a.generateSha1(), "Sammy", "test3");
-        c.writeOut();
+        Commit a = new Commit("", "", "Mark Ma", "this is a test");
+        Commit b = new Commit("", a.generateSha1(), "William", "test2");
+
         a.writeOut();
         b.writeOut();
+
     }
 
     // Gets the tree associated with a hash
@@ -190,10 +189,14 @@ public class commit {
 
     public String getSummary() {
         return summary;
-    } 
-    
-    public String getNextSha(){
+    }
+
+    public String getNextSha() {
         return nextSha;
+    }
+
+    public void deleteFile(String file) {
+
     }
 
 }

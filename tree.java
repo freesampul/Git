@@ -1,19 +1,19 @@
 import java.util.*;
 import java.io.*;
 
-public class tree {
+public class Tree {
     private StringBuilder sData;
     private Map<String, String> hMap;
     private List<String> tree;
 
-    public tree() {
+    public Tree() {
         sData = new StringBuilder();
         hMap = new HashMap<>();
         tree = new ArrayList<>();
     }
 
     public void writeToFile() throws Exception {
-        String sFile = blob.hashStringToSHA1(sData.toString());
+        String sFile = Blob.hashStringToSHA1(sData.toString());
         PrintWriter w_git = new PrintWriter(new BufferedWriter(new FileWriter("./objects/" + sFile)));
         w_git.print(sData.toString());
         w_git.close();
@@ -40,11 +40,8 @@ public class tree {
         String strData = sData.toString();
         if (strData.contains(sLine))
             return;
-        if (sData.isEmpty())
-            sData.append(sLine);
         else {
-            sData.append("\n");
-            sData.append(sLine);
+            sData.append(sLine + "\n");
         }
     }
 
@@ -78,15 +75,15 @@ public class tree {
     }
 
     public String getString() {
-        return sData.toString();
+        return sData.toString().trim();
     }
 
     public String getSHA1() {
-        return blob.hashStringToSHA1(sData.toString());
+        return Blob.hashStringToSHA1(sData.toString());
     }
 
     public void writeToObjects() throws IOException {
-        File shaName = new File("objects/" + blob.hashStringToSHA1(sData.toString()));
+        File shaName = new File("objects/" + Blob.hashStringToSHA1(sData.toString()));
         if (!shaName.exists()) {
             shaName.createNewFile();
         }
