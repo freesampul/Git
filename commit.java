@@ -20,9 +20,10 @@ public class Commit {
     private String nextSha;
 
     // This is the initial commit, sorry jake wrote this weird to me
-    public Commit(String parentTree, String parentCommit, String author, String summary) throws IOException// if no parent
-                                                                                                         // Sha1 just
-                                                                                                         // enter ""
+    public Commit(String parentTree, String parentCommit, String author, String summary) throws IOException// if no
+                                                                                                           // parent
+                                                                                                           // Sha1 just
+                                                                                                           // enter ""
     {
         if (parentTree == "") {
             this.parentTree = createTree();
@@ -82,7 +83,7 @@ public class Commit {
 
     // What was the point of this mark
     public void writeOut() throws IOException {
-        File f = new File("./objects/" +generateSha1());
+        File f = new File("./objects/" + generateSha1());
         f.createNewFile();
         PrintWriter pw = new PrintWriter(f);
         pw.println(parentTree);
@@ -142,18 +143,18 @@ public class Commit {
         File newFile = new File("balls");
         FileWriter ballWriter = new FileWriter(newFile);
         try (FileReader kevin = new FileReader(originalFile);
-         BufferedReader reader = new BufferedReader(kevin);
-         BufferedWriter writer = new BufferedWriter(new FileWriter(newFile))) {
+                BufferedReader reader = new BufferedReader(kevin);
+                BufferedWriter writer = new BufferedWriter(new FileWriter(newFile))) {
             String curr;
             int i = 0;
-    
+
             while ((curr = reader.readLine()) != null) {
                 if (i == 2) {
                     ballWriter.write(generateSha1());
                 } else {
                     ballWriter.write(curr);
                 }
-    
+
                 if (i != 5) {
                     ballWriter.write("\n");
                 }
@@ -170,20 +171,19 @@ public class Commit {
         // int i = 0;
 
         // while ((curr = reader.readLine()) != null) {
-        //     if (i == 2) {
-        //         writer.write(generateSha1());
-        //     } else
-        //         writer.write(curr);
+        // if (i == 2) {
+        // writer.write(generateSha1());
+        // } else
+        // writer.write(curr);
 
-        //     if (i != 5)
-        //         writer.write("\n");
-        //     i++;
+        // if (i != 5)
+        // writer.write("\n");
+        // i++;
         // }
         // writer.close();
         // reader.close();
         // newFile.renameTo(originalFile);
     }
-
 
     // Gets the tree associated with a hash
     public static String getTreeFromSha(String sha) throws IOException {
