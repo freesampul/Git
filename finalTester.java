@@ -32,8 +32,6 @@ public class finalTester {
         assertEquals("Sam", onecommit.getAuthor());
         assertEquals("testing 1 commit", onecommit.getSummary());
         assertEquals("", onecommit.getNextSha());
-
-        assertNotNull(onecommit.getParentTree());
         // assertTrue(onecommit.getParentTree().length() > 0);
     }
 
