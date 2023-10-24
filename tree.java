@@ -64,8 +64,6 @@ public class Tree {
         sData = new StringBuilder(newContent.toString().trim());
     }
 
-    }
-
     public void markEdited(String sFile) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("index", true))) {
             bw.write(edited + " " + sFile + "\n");

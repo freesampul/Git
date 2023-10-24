@@ -20,21 +20,24 @@ public class Commit {
     private String nextSha;
 
     // This is the initial commit, sorry jake wrote this weird to me
-    public Commit(String parentTree, String parentCommit, String author, String summary) throws IOException// if no
-                                                                                                           // parent
-                                                                                                           // Sha1 just
-                                                                                                           // enter ""
-    {
-        if (parentTree == "") {
-            this.parentTree = createTree();
-        } else {
-            this.parentTree = parentTree;
-        }
+    public Commit(String parentCommit, String author, String summary) throws IOException {
+        this.parentTree = createTree();
         this.summary = summary;
         this.author = author;
         this.parentCommit = parentCommit;
         clearIndex();
         this.nextSha = "";
+        writeOut();
+    }
+
+    public Commit(String parentTree, String parentCommit, String author, String summary) throws IOException {
+        this.parentTree = parentTree;
+        this.summary = summary;
+        this.author = author;
+        this.parentCommit = parentCommit;
+        clearIndex();
+        this.nextSha = "";
+        writeOut();
     }
 
     // Clears the inex
@@ -85,9 +88,10 @@ public class Commit {
     public void writeOut() throws IOException {
         File f = new File("./objects/" + generateSha1());
         f.createNewFile();
-        PrintWriter pw = new PrintWriter(f);
-        pw.println(parentTree);
-        pw.println(parentCommit);
+        FileWriter fw = new FileWriter(f);
+        fw.append(getParentTree() + "\n");
+        fw.append(parentCommit + "\n");
+
         File a = new File(parentCommit);
         if (a.exists()) {
             int lineNumber = 3;
@@ -125,11 +129,12 @@ public class Commit {
             file_writer.write(file_content.toString());
             file_writer.close();
         }
-        pw.println();
-        pw.println(author);
-        pw.println(getDate());
-        pw.print(summary);
-        pw.close();
+
+        fw.append("\n");
+        fw.append(author + "\n");
+        fw.append(getDate() + "\n");
+        fw.append(summary + "\n");
+        fw.close();
         writeInNewCommit();
     }
 

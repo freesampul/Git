@@ -9,14 +9,10 @@ public class Main {
             Tree t = new Tree();
             t.add("blob : 968fa8b4347b5bee8aea30a918f15ea98d9351ca");
             t.writeToObjects();
-            Commit a = new Commit("058d78c3e948ae6c5dd223b6e629b1bbd5ddbbf1", "", "Mark Ma",
-                    "this is a test, does not have parent because its first");
-            // // Commit b = new Commit("", a.generateSha1(), "William", "test2 does not
-            // have
-            // // next because most recent");
-            // System.out.println();
-            a.writeOut();
-            // b.writeOut();
+            Commit a = new Commit("", "Sam2",
+                    "test2");
+            System.out.println(a.getParentTree());
+            System.out.println("test");
         } catch (IOException e) {
             e.printStackTrace();
         }
