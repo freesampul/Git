@@ -10,9 +10,11 @@ public class Main {
             Tree t = new Tree();
             t.add("blob : 968fa8b4347b5bee8aea30a918f15ea98d9351ca");
             t.writeToObjects();
-            Commit a = new Commit("", "Sam2",
-                    "test2");
-            Commit b = new Commit(a.getParentTree(), a.generateSha1(), "Sam2", "test2commit");
+            // Index.remove("input.txt");
+            // Commit a = new Commit("", "Sam2",
+            // "test2");
+            // Commit b = new Commit(a.getParentTree(), a.generateSha1(), "Sam2",
+            // "test2commit");
             System.out.println("test");
         } catch (IOException e) {
             e.printStackTrace();

@@ -40,9 +40,8 @@ public class Index {
         String treeContents = tree.getString();
         String treeSha1 = Blob.hashStringToSHA1(treeContents);
         if (new File("objects/" + treeSha1).exists()) {
-            return;
+            System.out.println("added tree with SHA-1: " + treeSha1);
         }
-        System.out.println("added tree with SHA-1: " + treeSha1);
         FileWriter fw = new FileWriter("index", true);
         fw.write("tree : " + treeSha1 + "\n");
         fw.close();

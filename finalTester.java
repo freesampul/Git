@@ -61,7 +61,7 @@ public class finalTester {
         file("commitFoler2/1", "1");
         file("commitFoler2/2", "2");
         Index.add("commitFoler2");
-        Commit commit2 = new Commit("bbb", commit.generateSha1(), "kevin", "kill me");
+        Commit commit2 = new Commit(commit.getParentTree(), commit.generateSha1(), "kevin", "kill me");
         commit2.writeOut();
 
         try (FileReader read = new FileReader("objects/" + commit.generateSha1());
@@ -78,7 +78,7 @@ public class finalTester {
                 BufferedReader br2 = new BufferedReader(read)) {
             String treeSha2 = br2.readLine();
             String prevSha2 = br2.readLine();
-            assertEquals("bbb", treeSha2);
+            assertEquals(commit.getParentTree(), treeSha2);
             assertEquals(commit2.getParentCommit(), prevSha2);
         } catch (IOException e) {
             e.printStackTrace();
