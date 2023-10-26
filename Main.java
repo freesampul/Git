@@ -5,17 +5,10 @@ public class Main {
 
         try {
             Index.init();
-            Index.add("input.txt");
-            Index.add("second.txt");
             Tree t = new Tree();
             t.add("blob : 968fa8b4347b5bee8aea30a918f15ea98d9351ca");
             t.writeToObjects();
-            // Index.remove("input.txt");
-            // Commit a = new Commit("", "Sam2",
-            // "test2");
-            // Commit b = new Commit(a.getParentTree(), a.generateSha1(), "Sam2",
-            // "test2commit");
-            System.out.println("test");
+            Commit a = new Commit("", "Sam2", "test2");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,7 @@
 import java.util.*;
+
+import javafx.scene.Parent;
+
 import java.io.*;
 
 public class Tree {
@@ -22,18 +25,10 @@ public class Tree {
         w_git.close();
     }
 
-    public void addIndex() throws IOException {
+    public void addIndex(String parentTree) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader("index"))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (line.startsWith(deleted)) {
-                    String fileName = line.substring(deleted.length() + 1);
-                    remove(fileName);
-                } else if (line.startsWith(edited)) {
-                    String fileName = line.substring(edited.length() + 1);
-                    String newSha = Blob.hashStringToSHA1(readFileContent(fileName));
-                    replaceEditedFileEntry(fileName, newSha);
-                }
                 String[] parts = line.split(" : ");
                 if (parts.length >= 3) {
                     String type = parts[0];
@@ -43,6 +38,8 @@ public class Tree {
                         sData.append("blob").append(hash).append(" : ").append(name).append("\n");
                     } else if (type.equals("tree")) {
                         sData.append("tree : ").append(hash).append("\n");
+                    } else {
+                        deleteOrEdit(line, parentTree);
                     }
                 } else {
                     sData.append(line).append("\n");
@@ -89,7 +86,9 @@ public class Tree {
         Scanner sc = new Scanner(sContent);
         while (sc.hasNextLine()) {
             String curLine = sc.nextLine();
-            if (!curLine.contains(sFile))
+            if (curLine.contains(sFile))
+                newContent.append("\n");
+            else
                 newContent.append(curLine).append("\n");
         }
         sc.close();
@@ -164,4 +163,49 @@ public class Tree {
         return content.toString();
     }
 
+    public void deleteOrEdit(String content, String parentCommit) throws IOException {
+        if (content.contains(deleted)) {
+            findFile(content.substring(10), Commit.getTreeFromSha(parentCommit));
+        } else if (content.contains(edited)) {
+            String orginalFile = content.substring(9);
+            findFile(orginalFile, Commit.getTreeFromSha(parentCommit));
+            Scanner scan = new Scanner(new File(content.substring(9)));
+            String edit = scan.useDelimiter("\\A").next();
+            scan.close();
+            String newSha = Blob.hashStringToSHA1(edit);
+            add("blob : " + newSha + " : " + orginalFile);
+        }
+    }
+
+    public void findFile(String sha, String parentSha) throws IOException {
+        File file = new File("./objects/" + parentSha);
+        if (file.length() > 0) {
+            Scanner scan = new Scanner(file);
+            String content = scan.useDelimiter("\\A").next();
+            scan.close();
+            if (content.contains(sha)) {
+                FileInputStream fileInput = new FileInputStream("./objects" + parentSha);
+                DataInputStream data = new DataInputStream(fileInput);
+                BufferedReader br = new BufferedReader(new InputStreamReader(data));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (!line.contains(sha))
+                        add(line);
+                }
+                data.close();
+            } else {
+                FileInputStream fileInput = new FileInputStream("./objects" + parentSha);
+                DataInputStream data = new DataInputStream(fileInput);
+                BufferedReader br = new BufferedReader(new InputStreamReader(data));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.substring(6).indexOf(":") == -1 && line.contains("tree"))
+                        findFile(sha, line.substring(7, 47));
+                    else
+                        add(line);
+                }
+                br.close();
+            }
+        }
+    }
 }

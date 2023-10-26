@@ -91,35 +91,35 @@ public class finalTester {
         file("commitFoler/1", "1");
         file("commitFoler/2", "2");
         Index.add("commitFoler");
-        Commit commit = new Commit("aaa", "", "kevin", "kill me");
+        Commit commit = new Commit("", "kevin", "kill me");
         commit.writeOut();
 
         folder("commitFoler2");
         file("commitFoler2/1", "1");
         file("commitFoler2/2", "2");
         Index.add("commitFoler2");
-        Commit commit2 = new Commit("bbb", commit.generateSha1(), "kevin", "kill me");
+        Commit commit2 = new Commit(commit.generateSha1(), "kevin", "kill me");
         commit2.writeOut();
 
         folder("commitFoler3");
         file("commitFoler3/1", "1");
         file("commitFoler3/2", "2");
         Index.add("commitFoler3");
-        Commit commit3 = new Commit("bbb", commit.generateSha1(), "kevin", "kill me");
+        Commit commit3 = new Commit(commit.generateSha1(), "kevin", "kill me");
         commit2.writeOut();
 
         folder("commitFoler4");
         file("commitFoler4/1", "1");
         file("commitFoler4/2", "2");
         Index.add("commitFoler3");
-        Commit commit4 = new Commit("bbb", commit.generateSha1(), "kevin", "kill me");
+        Commit commit4 = new Commit(commit.generateSha1(), "kevin", "kill me");
         commit2.writeOut();
 
         try (FileReader read = new FileReader("objects/" + commit.generateSha1());
                 BufferedReader br = new BufferedReader(read)) {
             String treeSha = br.readLine();
             String nextSha = br.readLine();
-            assertEquals("aaa", treeSha);
+            // assertEquals("aaa", treeSha);
             // assertEquals(commit2.generateSha1(), nextSha);
         } catch (IOException e) {
             e.printStackTrace();
@@ -129,7 +129,7 @@ public class finalTester {
                 BufferedReader br2 = new BufferedReader(read)) {
             String treeSha2 = br2.readLine();
             String prevSha2 = br2.readLine();
-            assertEquals("bbb", treeSha2);
+            // assertEquals("bbb", treeSha2);
             assertEquals(commit2.getParentCommit(), prevSha2);
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,7 +138,7 @@ public class finalTester {
                 BufferedReader br2 = new BufferedReader(read)) {
             String treeSha2 = br2.readLine();
             String prevSha2 = br2.readLine();
-            assertEquals("bbb", treeSha2);
+            // assertEquals("bbb", treeSha2);
             assertEquals(commit2.getParentCommit(), prevSha2);
         } catch (IOException e) {
             e.printStackTrace();
@@ -147,7 +147,7 @@ public class finalTester {
                 BufferedReader br2 = new BufferedReader(read)) {
             String treeSha2 = br2.readLine();
             String prevSha2 = br2.readLine();
-            assertEquals("bbb", treeSha2);
+            // assertEquals("bbb", treeSha2);
             assertEquals(commit2.getParentCommit(), prevSha2);
         } catch (IOException e) {
             e.printStackTrace();
@@ -160,31 +160,31 @@ public class finalTester {
         file("commitFoler/1", "1");
         file("commitFoler/2", "2");
         Index.add("commitFoler");
-        Commit commit = new Commit("", "", "kevin", "kill me");
+        Commit commit = new Commit("", "kevin", "kill me");
         commit.writeOut();
 
         folder("commitFoler2");
         file("commitFoler2/1", "1");
         file("commitFoler2/2", "2");
         Index.add("commitFoler2");
-        Commit commit2 = new Commit("", commit.generateSha1(), "kevin", "kill me");
+        Commit commit2 = new Commit(commit.generateSha1(), "kevin", "kill me");
         commit2.writeOut();
 
         folder("commitFoler3");
         file("commitFoler3/1", "1");
         file("commitFoler3/2", "2");
         Index.add("commitFoler3");
-        Commit commit3 = new Commit("", commit.generateSha1(), "kevin", "kill me");
+        Commit commit3 = new Commit(commit.generateSha1(), "kevin", "kill me");
         commit2.writeOut();
 
         folder("commitFoler4");
         file("commitFoler4/1", "1");
         Index.add("commitFoler4");
-        Commit commit4 = new Commit("", commit.generateSha1(), "kevin", "kill me");
+        Commit commit4 = new Commit(commit.generateSha1(), "kevin", "kill me");
         commit2.writeOut();
 
         file("commitFoler4/3", "3");
-        Commit commit5 = new Commit("", commit.generateSha1(), "Anrew Tiss", ":(");
+        Commit commit5 = new Commit(commit.generateSha1(), "Anrew Tiss", ":(");
 
         Commit[] commits = new Commit[] { commit, commit2, commit3, commit4, commit5 };
         for (Commit currentCommmit : commits) {

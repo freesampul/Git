@@ -108,6 +108,9 @@ public class Index {
 
                 } else if (curr.startsWith("tree"))
                     bw.write(curr);
+                else if (curr.startsWith("*deleted*") || curr.startsWith("*edited*")) {
+                    bw.write(curr);
+                }
             }
         }
         bw.close();

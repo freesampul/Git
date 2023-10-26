@@ -32,9 +32,13 @@ public class Commit {
 
     public Commit(String parentTree, String parentCommit, String author, String summary) throws IOException {
         this.parentTree = parentTree;
+        Tree t = new Tree();
+        t.addIndex(parentTree);
         this.summary = summary;
         this.author = author;
         this.parentCommit = parentCommit;
+        getTreeFromSha(parentTree);
+
         clearIndex();
         this.nextSha = "";
         writeOut();
@@ -57,7 +61,7 @@ public class Commit {
     // Creates the tree if it doesn't exist
     public String createTree() throws IOException {
         Tree t = new Tree();
-        t.addIndex();
+        t.addIndex(parentTree);
         t.writeToObjects();
         return (t.getSHA1());
     }
