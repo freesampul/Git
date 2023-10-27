@@ -5,10 +5,13 @@ public class Main {
 
         try {
             Index.init();
+            // Index.addFile("input.txt");
+            // Index.addFile("second.txt");
             Tree t = new Tree();
-            t.add("blob : 968fa8b4347b5bee8aea30a918f15ea98d9351ca");
+            // t.add("blob : 968fa8b4347b5bee8aea30a918f15ea98d9351ca");
             t.writeToObjects();
-            Commit a = new Commit("", "Sam2", "test2");
+            Commit a = new Commit("d2c9ab373b1069f4d6a4709f42807d1fe96580a2",
+                    "a197c61105f4d9de7c97803fbd11ea091c313a20", "Sam", "testing23");
         } catch (IOException e) {
             e.printStackTrace();
         }

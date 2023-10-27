@@ -29,6 +29,11 @@ public class Tree {
         try (BufferedReader br = new BufferedReader(new FileReader("index"))) {
             String line;
             while ((line = br.readLine()) != null) {
+                if (line.contains(deleted)) {
+                    String filetoDelete = line.substring(10);
+                    // deleteOrEdit(line, parentTree);
+                    writeNewTreeDelete(parentTree, filetoDelete);
+                }
                 String[] parts = line.split(" : ");
                 if (parts.length >= 3) {
                     String type = parts[0];
@@ -43,6 +48,17 @@ public class Tree {
                     }
                 } else {
                     sData.append(line).append("\n");
+                }
+            }
+        }
+    }
+
+    public void writeNewTreeDelete(String parentTree, String fileToDelete) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader("./objects/" + parentTree))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (!line.contains(fileToDelete)) {
+                    sData.append(line);
                 }
             }
         }
@@ -165,7 +181,7 @@ public class Tree {
 
     public void deleteOrEdit(String content, String parentCommit) throws IOException {
         if (content.contains(deleted)) {
-            findFile(content.substring(10), Commit.getTreeFromSha(parentCommit));
+            findFile(content.substring(10), parentCommit);
         } else if (content.contains(edited)) {
             String orginalFile = content.substring(9);
             findFile(orginalFile, Commit.getTreeFromSha(parentCommit));

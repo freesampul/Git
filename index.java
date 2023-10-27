@@ -49,7 +49,7 @@ public class Index {
 
     }
 
-    public static void add(String fileName) throws IOException {
+    public static void addFile(String fileName) throws IOException {
         try {
             Blob b = new Blob(fileName);
             String hashName = b.getSha();
@@ -117,4 +117,9 @@ public class Index {
         bw.close();
         temp.renameTo(indexFile);
     }
+
+    // public boolean first() throws Exception {
+
+    // }
+
 }
